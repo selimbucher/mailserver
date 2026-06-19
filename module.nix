@@ -13,6 +13,8 @@
       "selim@selim.one" = {
         hashedPasswordFile = "/etc/mailserver/password-selim";
         aliases = [
+          "hello@selim.one"
+          "contact@selim.one"
           "postmaster@selim.one"
           "postmaster@civ6.ch"
           "abuse@selim.one"
