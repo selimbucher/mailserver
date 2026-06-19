@@ -12,7 +12,7 @@
   outputs = { self, nixpkgs, simple-nixos-mailserver }: {
     nixosModules.default = {
       imports = [
-        simple-nixos-mailserver.nixosModule
+        simple-nixos-mailserver.nixosModules.default
         ./module.nix
       ];
     };
