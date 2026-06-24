@@ -41,4 +41,59 @@
       environmentFile = "/etc/secrets/cloudflare-acme.env";
     };
   };
+
+  # Autoconfig endpoints so mail clients can discover settings automatically.
+  # DNS: autoconfig.selim.one and autodiscover.selim.one A → server IP.
+  services.caddy.virtualHosts."autoconfig.selim.one".extraConfig = ''
+    header Content-Type "application/xml; charset=utf-8"
+    respond `<?xml version="1.0" encoding="UTF-8"?>
+<clientConfig version="1.1">
+  <emailProvider id="selim.one">
+    <domain>selim.one</domain>
+    <displayName>Selim Mail</displayName>
+    <displayShortName>Selim</displayShortName>
+    <incomingServer type="imap">
+      <hostname>mail.selim.one</hostname>
+      <port>993</port>
+      <socketType>SSL</socketType>
+      <authentication>password-cleartext</authentication>
+      <username>%EMAILADDRESS%</username>
+    </incomingServer>
+    <outgoingServer type="smtp">
+      <hostname>mail.selim.one</hostname>
+      <port>465</port>
+      <socketType>SSL</socketType>
+      <authentication>password-cleartext</authentication>
+      <username>%EMAILADDRESS%</username>
+    </outgoingServer>
+  </emailProvider>
+</clientConfig>` 200
+  '';
+
+  services.caddy.virtualHosts."autodiscover.selim.one".extraConfig = ''
+    header Content-Type "application/xml; charset=utf-8"
+    respond `<?xml version="1.0" encoding="UTF-8"?>
+<Autodiscover xmlns="http://schemas.microsoft.com/exchange/autodiscover/responseschema/2006">
+  <Response xmlns="http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a">
+    <Account>
+      <AccountType>email</AccountType>
+      <Action>settings</Action>
+      <Protocol>
+        <Type>IMAP</Type>
+        <Server>mail.selim.one</Server>
+        <Port>993</Port>
+        <LoginName>%EMAILADDRESS%</LoginName>
+        <SSL>on</SSL>
+      </Protocol>
+      <Protocol>
+        <Type>SMTP</Type>
+        <Server>mail.selim.one</Server>
+        <Port>465</Port>
+        <LoginName>%EMAILADDRESS%</LoginName>
+        <SSL>on</SSL>
+      </Protocol>
+    </Account>
+  </Response>
+</Autodiscover>` 200
+  '';
 }
