@@ -1,5 +1,8 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
+let
+  customCss = pkgs.writeText "roundcube-custom.css" (builtins.readFile ./webmail.css);
+in
 {
   mailserver = {
     enable = true;
@@ -43,8 +46,40 @@
     };
   };
 
-  # Autoconfig endpoints so mail clients can discover settings automatically.
-  # DNS: autoconfig.selim.one and autodiscover.selim.one A → server IP.
+  # Roundcube webmail at mail.selim.one
+  services.roundcube = {
+    enable = true;
+    hostName = "mail.selim.one";
+    extraConfig = ''
+      $config['default_host'] = 'ssl://mail.selim.one';
+      $config['default_port'] = 993;
+      $config['smtp_server'] = 'ssl://mail.selim.one';
+      $config['smtp_port'] = 465;
+      $config['smtp_user'] = '%u';
+      $config['smtp_pass'] = '%p';
+      $config['product_name'] = 'Selim Mail';
+      $config['custom_stylesheet'] = '/custom.css';
+    '';
+  };
+
+  # nginx serves Roundcube on localhost only.
+  # enableACME = false prevents nginx from conflicting with our DNS-01 cert.
+  services.nginx = {
+    defaultListenAddresses = [ "127.0.0.1" ];
+    virtualHosts."mail.selim.one" = {
+      enableACME = false;
+      addSSL = false;
+      listen = [{ addr = "127.0.0.1"; port = 8080; ssl = false; }];
+      locations."/custom.css".alias = toString customCss;
+    };
+  };
+
+  # Caddy proxies HTTPS → nginx for Roundcube.
+  # Autoconfig endpoints for mail client autodiscovery.
+  services.caddy.virtualHosts."mail.selim.one".extraConfig = ''
+    reverse_proxy 127.0.0.1:8080
+  '';
+
   services.caddy.virtualHosts."autoconfig.selim.one".extraConfig = ''
     header Content-Type "application/xml; charset=utf-8"
     respond `<?xml version="1.0" encoding="UTF-8"?>
