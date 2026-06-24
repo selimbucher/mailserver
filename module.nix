@@ -63,6 +63,7 @@ in
   # nginx serves Roundcube on localhost only — no SSL, Caddy handles TLS.
   # lib.mkForce overrides the roundcube module's SSL defaults.
   services.nginx = {
+    enable = true;
     defaultListenAddresses = [ "127.0.0.1" ];
     virtualHosts."mail.selim.one" = {
       enableACME = lib.mkForce false;
