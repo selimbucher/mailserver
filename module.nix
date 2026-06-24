@@ -62,14 +62,16 @@ in
     '';
   };
 
-  # nginx serves Roundcube on localhost only.
-  # enableACME = false prevents nginx from conflicting with our DNS-01 cert.
+  # nginx serves Roundcube on localhost only — no SSL, Caddy handles TLS.
+  # lib.mkForce overrides the roundcube module's SSL defaults.
   services.nginx = {
     defaultListenAddresses = [ "127.0.0.1" ];
     virtualHosts."mail.selim.one" = {
-      enableACME = false;
-      addSSL = false;
-      listen = [{ addr = "127.0.0.1"; port = 8080; ssl = false; }];
+      enableACME = lib.mkForce false;
+      addSSL    = lib.mkForce false;
+      forceSSL  = lib.mkForce false;
+      onlySSL   = lib.mkForce false;
+      listen    = lib.mkForce [{ addr = "127.0.0.1"; port = 8080; ssl = false; }];
       locations."/custom.css".alias = toString customCss;
     };
   };
