@@ -72,7 +72,7 @@ in
       forceSSL  = lib.mkForce false;
       onlySSL   = lib.mkForce false;
       listen    = lib.mkForce [{ addr = "127.0.0.1"; port = 8080; ssl = false; }];
-      locations."/custom.css".alias = toString customCss;
+      locations."= /custom.css".alias = toString customCss;
     };
   };
 
