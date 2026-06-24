@@ -58,14 +58,14 @@
       <port>993</port>
       <socketType>SSL</socketType>
       <authentication>password-cleartext</authentication>
-      <username>%EMAILADDRESS%</username>
+      <username>me@selim.one</username>
     </incomingServer>
     <outgoingServer type="smtp">
       <hostname>mail.selim.one</hostname>
       <port>465</port>
       <socketType>SSL</socketType>
       <authentication>password-cleartext</authentication>
-      <username>%EMAILADDRESS%</username>
+      <username>me@selim.one</username>
     </outgoingServer>
   </emailProvider>
 </clientConfig>` 200
@@ -83,14 +83,14 @@
         <Type>IMAP</Type>
         <Server>mail.selim.one</Server>
         <Port>993</Port>
-        <LoginName>%EMAILADDRESS%</LoginName>
+        <LoginName>me@selim.one</LoginName>
         <SSL>on</SSL>
       </Protocol>
       <Protocol>
         <Type>SMTP</Type>
         <Server>mail.selim.one</Server>
         <Port>465</Port>
-        <LoginName>%EMAILADDRESS%</LoginName>
+        <LoginName>me@selim.one</LoginName>
         <SSL>on</SSL>
       </Protocol>
     </Account>
