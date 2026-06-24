@@ -77,7 +77,7 @@ in
   # Caddy proxies HTTPS → nginx for Roundcube.
   # Autoconfig endpoints for mail client autodiscovery.
   services.caddy.virtualHosts."mail.selim.one".extraConfig = ''
-    reverse_proxy 127.0.0.1:8080
+    reverse_proxy 127.0.0.1:8025
   '';
 
   services.caddy.virtualHosts."autoconfig.selim.one".extraConfig = ''
