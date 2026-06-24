@@ -8,11 +8,12 @@
     domains = [ "selim.one" "civ6.ch" ];
 
     # Password files live on the server, not in git.
-    # Generate with: nix-shell -p mkpasswd --run 'mkpasswd -s -m bcrypt' > /etc/mailserver/password-selim
+    # Generate with: nix-shell -p mkpasswd --run 'mkpasswd -s -m bcrypt' > /etc/mailserver/password-me
     accounts = {
-      "selim@selim.one" = {
-        hashedPasswordFile = "/etc/mailserver/password-selim";
+      "me@selim.one" = {
+        hashedPasswordFile = "/etc/mailserver/password-me";
         aliases = [
+          "selim@selim.one"
           "hello@selim.one"
           "contact@selim.one"
           "postmaster@selim.one"
@@ -35,7 +36,7 @@
   #   CLOUDFLARE_DNS_API_TOKEN=<token with Zone:DNS:Edit for selim.one>
   security.acme = {
     acceptTerms = true;
-    defaults.email = "selim@selim.one";
+    defaults.email = "me@selim.one";
     certs."mail.selim.one" = {
       dnsProvider = "cloudflare";
       environmentFile = "/etc/secrets/cloudflare-acme.env";
