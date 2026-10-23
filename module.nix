@@ -43,6 +43,10 @@ in
     certs."mail.selim.one" = {
       dnsProvider = "cloudflare";
       environmentFile = "/etc/secrets/cloudflare-acme.env";
+      # Check the challenge record against Cloudflare, not the box's kresd:
+      # kresd caches the NXDOMAIN from lego's first check, and the propagation
+      # wait then times out on a record that is already live.
+      dnsResolver = "1.1.1.1:53";
     };
   };
 
