@@ -34,6 +34,18 @@ in
     x509.useACMEHost = "mail.selim.one";
   };
 
+  # No Junk sorting (add_header) and no greylisting: both only ever hit real
+  # mail here. Mail scoring 15+ is still rejected.
+  services.rspamd.locals = {
+    "actions.conf".text = ''
+      add_header = null;
+      greylist = null;
+    '';
+    "greylist.conf".text = ''
+      enabled = false;
+    '';
+  };
+
   # ACME cert via Cloudflare DNS-01 — no conflict with Caddy on port 80.
   # Needs /etc/secrets/cloudflare-acme.env on the server containing:
   #   CLOUDFLARE_DNS_API_TOKEN=<token with Zone:DNS:Edit for selim.one>
