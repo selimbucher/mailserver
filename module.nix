@@ -8,7 +8,7 @@ in
     enable = true;
     stateVersion = 5;
     fqdn = "mail.selim.one";
-    domains = [ "selim.one" "civ6.ch" ];
+    domains = [ "selim.one" "civ6.ch" "inkdropaudio.com" ];
 
     # Password files live on the server, not in git.
     # Generate with: nix-shell -p mkpasswd --run 'mkpasswd -s -m bcrypt' > /etc/mailserver/password-me
@@ -23,6 +23,9 @@ in
           "postmaster@civ6.ch"
           "abuse@selim.one"
           "abuse@civ6.ch"
+          "hello@inkdropaudio.com"
+          "postmaster@inkdropaudio.com"
+          "abuse@inkdropaudio.com"
         ];
       };
       "no-reply@civ6.ch" = {
